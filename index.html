@@ -32,23 +32,19 @@
 
 	
 <script>
-  const images = [
-    "https://yavuzceliker.github.io/sample-images/image-1.jpg",
-    "https://yavuzceliker.github.io/sample-images/image-2.jpg",
-    "https://yavuzceliker.github.io/sample-images/image-3.jpg"
-  ];
+ 
 
   let currentIndex = 0;
   const photo = document.getElementById("photo");
 
   function showNext() {
-    currentIndex = (currentIndex + 1) % images.length;
-    photo.src = images[currentIndex];
+    currentIndex = (currentIndex + 1);
+    photo.src = '/content/1.jpg';
   }
 
   function showPrevious() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    photo.src = images[currentIndex];
+    currentIndex = (currentIndex - 1 );
+    photo.src = '~/content/1.jpg';
   }
 </script>
 <body>
@@ -77,9 +73,8 @@
     <div class="container">
 	
 	
-	  <div class="photo-frame">
-  <img id="photo" src="https://yavuzceliker.github.io/sample-images/image-1.jpg" alt="Photo Frame" class="img-fluid">
-
+<div class="photo-frame">
+  <img id="photo" src="/content/1.jpg" alt="Photo Frame" class="img-fluid">
   <div class="frame-buttons d-flex justify-content-between mt-3">
     <button class="btn btn-outline-primary" onclick="showPrevious()">← Previous</button>
     <button class="btn btn-outline-primary" onclick="showNext()">Next →</button>
