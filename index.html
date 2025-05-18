@@ -34,23 +34,9 @@
 <script>
 
 	$(document).ready(function(){
+		alert('---');
         let currentIndex = 0;
-        const photo = document.getElementById("photo");
-
-  function showNext() {
-  alert(photo);
-  alert('---');
-  alert(photo.src);
-    currentIndex = (currentIndex + 1);
-    photo.src="./content/2.jpg";
-	  
-  }
-
-  function showPrevious() {
-	  alert('prev');
-    currentIndex = (currentIndex - 1 );
-    photo.src="./content/3.jpg";
-  }
+        
 });
 
   
@@ -84,8 +70,8 @@
 <div class="photo-frame">
   <img id="photo" src="./content/1.jpg" alt="Photo Frame" class="img-fluid">
   <div class="frame-buttons d-flex justify-content-between mt-3">
-    <button class="btn btn-outline-primary" onclick="showPrevious()">← Previous</button>
-    <button class="btn btn-outline-primary" onclick="showNext()">Next →</button>
+    <button id="previous" class="btn btn-outline-primary">← Previous</button>
+    <button id="next" class="btn btn-outline-primary">Next →</button>
   </div>
 </div>
 	
