@@ -34,15 +34,18 @@
 <script>
 
 	$(document).ready(function(){
-		
-        let currentIndex = 0;
+	let templateURL = "./content/{#}.jpg";	
+        let idx = 0;
+		let maxContent = 20;
 
 		$("#next").click(function(event) {
-         		$('#photo').prop('src','./content/2.jpg');
+			 idx = idx + 1;
+         		$('#photo').prop('src',templateURL.replace('{#}', idx));
     		});
 
 		$("#previous").click(function(event) {
-         		$('#photo').prop('src','./content/3.jpg');
+			 idx = idx - 1;
+         		$('#photo').prop('src',templateURL.replace('{#}', idx));
     		});
         
 });
