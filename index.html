@@ -39,12 +39,12 @@
 
   function showNext() {
     currentIndex = (currentIndex + 1);
-    photo.src = '/content/1.jpg';
+    photo.src = './content/2.jpg';
   }
 
   function showPrevious() {
     currentIndex = (currentIndex - 1 );
-    photo.src = '~/content/1.jpg';
+    photo.src = './content/3.jpg';
   }
 </script>
 <body>
@@ -74,7 +74,7 @@
 	
 	
 <div class="photo-frame">
-  <img id="photo" src="/content/1.jpg" alt="Photo Frame" class="img-fluid">
+  <img id="photo" src="./content/1.jpg" alt="Photo Frame" class="img-fluid">
   <div class="frame-buttons d-flex justify-content-between mt-3">
     <button class="btn btn-outline-primary" onclick="showPrevious()">← Previous</button>
     <button class="btn btn-outline-primary" onclick="showNext()">Next →</button>
