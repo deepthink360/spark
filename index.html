@@ -38,12 +38,14 @@
   const photo = document.getElementById("photo");
 
   function showNext() {
+	  alert('next');
     currentIndex = (currentIndex + 1);
     photo.src="./content/2.jpg";
 	  
   }
 
   function showPrevious() {
+	  alert('prev');
     currentIndex = (currentIndex - 1 );
     photo.src="./content/3.jpg";
   }
