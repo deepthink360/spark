@@ -32,16 +32,15 @@
 
 	
 <script>
- 
 
-  let currentIndex = 0;
-  const photo = document.getElementById("photo");
+	$(document).ready(function(){
+        let currentIndex = 0;
+        const photo = document.getElementById("photo");
 
   function showNext() {
-	
-	  alert(photo);
-	   alert('---');
-	    alert(photo.src);
+  alert(photo);
+  alert('---');
+  alert(photo.src);
     currentIndex = (currentIndex + 1);
     photo.src="./content/2.jpg";
 	  
@@ -52,6 +51,9 @@
     currentIndex = (currentIndex - 1 );
     photo.src="./content/3.jpg";
   }
+});
+
+  
 </script>
 <body>
 
