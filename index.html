@@ -1,100 +1,281 @@
-<html>
-
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Ideas Hub</title>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IdeaHub Viewer</title>
 
-	 <style>
-    .photo-frame {
-      max-width: 600px;
-      margin: 50px auto;
-      border: 4px solid #ccc;
-      padding: 10px;
-      border-radius: 8px;
-      background-color: #f8f9fa;
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background-color: #343a40;
+      color: orange;
+      padding-top: 1rem;
+      min-width: 220px;
+    }
+
+    .sidebar .btn {
+      text-align: left;
+      color: orange;
+      background-color: transparent;
+      border: none;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar .btn:hover {
+      color: white;
+      background-color: orange;
+    }
+
+    .sidebar .btn i {
+      margin-right: 10px;
+    }
+
+    .active-topic {
+      background-color: orange !important;
+      color: white !important;
+      font-weight: bold;
+    }
+
+    .main-content {
+      margin-left: 220px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      min-height: 100vh;
+    }
+
+    .photo-frame {
+      width: 100%;
+      max-width: 600px;
+      height: 350px;
+      border: 5px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      background-color: #f8f9fa;
     }
 
     .photo-frame img {
       width: 100%;
-      height: auto;
-      border-radius: 5px;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .frame-buttons {
-      margin-top: 15px;
+    .topic-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      width: 320px;
+    }
+
+    #imageCounter {
+      min-width: 50px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #343a40;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+
+      .sidebar {
+        min-width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .photo-frame {
+        max-width: 100%;
+        height: 250px;
+      }
+
+      .nav-buttons {
+        width: 100%;
+        flex-direction: row;
+        gap: 1rem;
+      }
     }
   </style>
 </head>
-
-	
-<script>
-
-	$(document).ready(function(){
-	let templateURL = "./content/{#}.jpg";	
-        let idx = 0;
-		let maxContent = 25;
-
-		$("#next").click(function(event) {
-			 idx = idx + 1;
-			if(idx > maxContent){idx = 0;}
-			
-         		$('#photo').prop('src',templateURL.replace('{#}', idx));
-    		});
-
-		$("#previous").click(function(event) {
-			 idx = idx - 1;
-			if(idx == 0){idx = maxContent;}
-         		$('#photo').prop('src',templateURL.replace('{#}', idx));
-    		});
-        
-});
-
-  
-</script>
 <body>
 
-   <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">idea Hub</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarButtons"
-        aria-controls="navbarButtons" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse justify-content-end" id="navbarButtons">
-        <div class="d-flex gap-2">
-          <button class="btn btn-light" type="button">Home</button>
-          <button class="btn btn-outline-light" type="button">About</button>
-          <button class="btn btn-outline-light" type="button">Services</button>
-          <button class="btn btn-outline-light" type="button">Contact</button>
-        </div>
-      </div>
+<div class="d-flex flex-wrap">
+  <!-- Sidebar -->
+  <nav class="sidebar d-flex flex-column p-3">
+    <div class="mb-4 ps-2">
+      <span class="fs-4"><i class="fas fa-lightbulb"></i> IdeaHub</span>
     </div>
+    <button class="btn topic-btn" onclick="loadTopic('Philosophy', this)"><i class="fas fa-brain"></i> Philosophy</button>
+    <button class="btn topic-btn" onclick="loadTopic('Thinking', this)"><i class="fas fa-lightbulb"></i> Thinking</button>
+    <button class="btn topic-btn" onclick="loadTopic('Politics', this)"><i class="fas fa-landmark"></i> Politics</button>
+    <button class="btn topic-btn" onclick="loadTopic('Science', this)"><i class="fas fa-flask"></i> Science</button>
+    <button class="btn topic-btn" onclick="loadTopic('Learning', this)"><i class="fas fa-graduation-cap"></i> Learning</button>
+    <button class="btn topic-btn" onclick="loadTopic('Religion', this)"><i class="fas fa-praying-hands"></i> Religion</button>
+    <button class="btn topic-btn" onclick="loadTopic('Productivity', this)"><i class="fas fa-gears"></i> Productivity</button>
   </nav>
 
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="topic-title" id="topicTitle">Philosophy</div>
+    <div class="photo-frame">
+      <img id="topicImage" src="" alt="Topic Image" />
+    </div>
 
-    <div class="container">
-	
-	
-<div class="photo-frame">
-  <img id="photo" src="./content/1.jpg" alt="Photo Frame" class="img-fluid">
-  <div class="frame-buttons d-flex justify-content-between mt-3">
-    <button id="previous" class="btn btn-outline-primary">← Previous</button>
-    <button id="next" class="btn btn-outline-primary">Next →</button>
+    <div class="nav-buttons">
+      <button class="btn btn-outline-dark" onclick="changeImage(-1)">
+        <i class="fas fa-chevron-left"></i> Previous
+      </button>
+
+      <div id="imageCounter">1</div>
+
+      <button class="btn btn-outline-dark" onclick="changeImage(1)">
+        Next <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
 </div>
-	
 
-     
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    
-	</div>
+<script>
+  // Topics with multiple images
+  const topics = [
+    {
+      title: 'Philosophy',
+      images: [
+        'https://picsum.photos/id/1011/800/350',
+        'https://picsum.photos/id/1019/800/350',
+        'https://picsum.photos/id/1020/800/350'
+      ]
+    },
+    {
+      title: 'Thinking',
+      images: [
+        'https://picsum.photos/id/1012/800/350',
+        'https://picsum.photos/id/1021/800/350',
+        'https://picsum.photos/id/1022/800/350'
+      ]
+    },
+    {
+      title: 'Politics',
+      images: [
+        'https://picsum.photos/id/1013/800/350',
+        'https://picsum.photos/id/1023/800/350',
+        'https://picsum.photos/id/1024/800/350'
+      ]
+    },
+    {
+      title: 'Science',
+      images: [
+        'https://picsum.photos/id/1014/800/350',
+        'https://picsum.photos/id/1025/800/350',
+        'https://picsum.photos/id/1026/800/350'
+      ]
+    },
+    {
+      title: 'Learning',
+      images: [
+        'https://picsum.photos/id/1015/800/350',
+        'https://picsum.photos/id/1027/800/350',
+        'https://picsum.photos/id/1028/800/350'
+      ]
+    },
+    {
+      title: 'Religion',
+      images: [
+        'https://picsum.photos/id/1016/800/350',
+        'https://picsum.photos/id/1029/800/350',
+        'https://picsum.photos/id/1030/800/350'
+      ]
+    },
+    {
+      title: 'Productivity',
+      images: [
+        'https://picsum.photos/id/1018/800/350',
+        'https://picsum.photos/id/1031/800/350',
+        'https://picsum.photos/id/1032/800/350'
+      ]
+    }
+  ];
+
+  let currentTopicIndex = 0;
+  let currentImageIndex = 0;
+  let imageCounterValue = 1; // counter runs from 1 to 100
+
+  function updateDisplay() {
+    const topic = topics[currentTopicIndex];
+    document.getElementById('topicTitle').textContent = topic.title;
+    document.getElementById('topicImage').src = topic.images[currentImageIndex];
+    imageCounterValue = 1; // reset counter when topic changes
+    document.getElementById('imageCounter').textContent = imageCounterValue;
+  }
+
+  function highlightActiveButton() {
+    const buttons = document.querySelectorAll('.topic-btn');
+    buttons.forEach(btn => {
+      btn.classList.remove('active-topic');
+      if (btn.textContent.trim().startsWith(topics[currentTopicIndex].title)) {
+        btn.classList.add('active-topic');
+      }
+    });
+  }
+
+  function loadTopic(topicName, btnElement) {
+    const index = topics.findIndex(t => t.title === topicName);
+    if (index !== -1) {
+      currentTopicIndex = index;
+      currentImageIndex = 0; // reset image index to first image for the new topic
+      updateDisplay();
+      highlightActiveButton();
+    }
+  }
+
+  function changeImage(direction) {
+    const images = topics[currentTopicIndex].images;
+    currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+    document.getElementById('topicImage').src = images[currentImageIndex];
+
+    // Increment or decrement the counter, looping 1 to 100
+    imageCounterValue += direction;
+    if (imageCounterValue > 100) imageCounterValue = 1;
+    if (imageCounterValue < 1) imageCounterValue = 100;
+    document.getElementById('imageCounter').textContent = imageCounterValue;
+  }
+
+  // Initialize page on load
+  document.addEventListener("DOMContentLoaded", () => {
+    currentTopicIndex = 0;
+    currentImageIndex = 0;
+    imageCounterValue = 1;
+    updateDisplay();
+    highlightActiveButton();
+  });
+</script>
 
 </body>
-   
 </html>
