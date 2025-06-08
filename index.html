@@ -67,12 +67,15 @@
       overflow: hidden;
       margin-bottom: 1rem;
       background-color: #f8f9fa;
+      position: relative;
     }
 
     .photo-frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
     }
 
     .topic-title {
@@ -163,51 +166,48 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-
-
   // Topics with multiple images
   let topics = [
     {
-	
       title: 'Philosophy',
-	  code: 'PH',
-	  count: 10,
-       images: []
+      code: 'PH',
+      count: 10,
+      images: []
     },
     {
       title: 'Thinking',
-	   code: 'TH',
-	  count: 10,
+      code: 'TH',
+      count: 10,
       images: []
     },
     {
       title: 'Politics',
-	   code: 'PO',
-	  count: 10,
-       images: []
+      code: 'PO',
+      count: 10,
+      images: []
     },
     {
       title: 'Science',
-	   code: 'SC',
-	  count: 10,
-       images: []
+      code: 'SC',
+      count: 10,
+      images: []
     },
     {
       title: 'Learning',
-	   code: 'LE',
-	  count: 10,
-       images: []
+      code: 'LE',
+      count: 10,
+      images: []
     },
     {
       title: 'Religion',
-	   code: 'RG',
-	  count: 10,
+      code: 'RG',
+      count: 10,
       images: []
     },
     {
       title: 'Productivity',
-	   code: 'PD',
-	  count: 10,
+      code: 'PD',
+      count: 2,
       images: []
     }
   ];
@@ -218,8 +218,17 @@
 
   function updateDisplay() {
     const topic = topics[currentTopicIndex];
+    const imgElement = document.getElementById('topicImage');
+    imgElement.style.opacity = 0; // Start with image hidden
+
+    setTimeout(() => {
+      imgElement.src = topic.images[currentImageIndex];
+      imgElement.onload = () => {
+        imgElement.style.opacity = 1; // Fade in after image is loaded
+      };
+    }, 200); // Match the timeout duration with the CSS transition duration
+
     document.getElementById('topicTitle').textContent = topic.title;
-    document.getElementById('topicImage').src = topic.images[currentImageIndex];
     imageCounterValue = 1; // reset counter when topic changes
     document.getElementById('imageCounter').textContent = imageCounterValue;
   }
@@ -246,46 +255,44 @@
 
   function changeImage(direction) {
     const images = topics[currentTopicIndex].images;
-    currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
-    document.getElementById('topicImage').src = images[currentImageIndex];
+    const imgElement = document.getElementById('topicImage');
+    imgElement.style.opacity = 0; // Fade out current image
 
-    // Increment or decrement the counter, looping 1 to max array length
-    imageCounterValue += direction;
-    if (imageCounterValue >  images.length) imageCounterValue = 1;
-    if (imageCounterValue < 1) imageCounterValue =  images.length;
-    document.getElementById('imageCounter').textContent = imageCounterValue;
+    setTimeout(() => {
+      currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
+      imgElement.src = images[currentImageIndex];
+      imgElement.onload = () => {
+        imgElement.style.opacity = 1; // Fade in new image
+      };
+
+      // Increment or decrement the counter, looping 1 to max array length
+      imageCounterValue += direction;
+      if (imageCounterValue > images.length) imageCounterValue = 1;
+      if (imageCounterValue < 1) imageCounterValue = images.length;
+      document.getElementById('imageCounter').textContent = imageCounterValue;
+    }, 200); // Match the timeout duration with the CSS transition duration
   }
 
   // Initialize page on load
   document.addEventListener("DOMContentLoaded", () => {
-	LoadImages();
+    loadImages();
     currentTopicIndex = 0;
     currentImageIndex = 0;
     imageCounterValue = 1;
     updateDisplay();
     highlightActiveButton();
-	
-	console.log("DOM loaded!");
-	
+    console.log("DOM loaded!");
   });
-  
-	function LoadImages() {
-		console.log("Window loaded!");
-		
-		for (let i = 0; i < topics.length; i++) {
-		
-		for (let j = 1; j <= topics[i].count; j++) {
-			
-			let url = `https://mailboxsunil.github.io/iHub/content/${topics[i].code}/${j}.jpg`;
-			topics[i].images.push(url);
-			
-		}
-	}
-	};
-  
 
-
-
+  function loadImages() {
+    console.log("Loading images...");
+    for (let i = 0; i < topics.length; i++) {
+      for (let j = 1; j <= topics[i].count; j++) {
+        let url = `https://mailboxsunil.github.io/iHub/content/${topics[i].code}/${j}.jpg`;
+        topics[i].images.push(url);
+      }
+    }
+  }
 </script>
 
 </body>
