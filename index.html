@@ -163,64 +163,52 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+
+
   // Topics with multiple images
-  const topics = [
+  let topics = [
     {
+	
       title: 'Philosophy',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/PH/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PH/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PH/3.jpg'
-      ]
+	  code: 'PH',
+	  count: 10,
+       images: []
     },
     {
       title: 'Thinking',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/TH/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/TH/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/TH/3.jpg'
-      ]
+	   code: 'TH',
+	  count: 10,
+      images: []
     },
     {
       title: 'Politics',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/PO/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PO/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PO/3.jpg'
-
-      ]
+	   code: 'PO',
+	  count: 10,
+       images: []
     },
     {
       title: 'Science',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/SC/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/SC/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/SC/3.jpg'
-      ]
+	   code: 'SC',
+	  count: 10,
+       images: []
     },
     {
       title: 'Learning',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/LE/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/LE/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/LE/3.jpg'
-      ]
+	   code: 'LE',
+	  count: 10,
+       images: []
     },
     {
       title: 'Religion',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/RG/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/RG/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/RG/3.jpg'
-      ]
+	   code: 'RG',
+	  count: 10,
+      images: []
     },
     {
       title: 'Productivity',
-      images: [
-        'https://mailboxsunil.github.io/iHub/content/PD/1.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PD/2.jpg',
-        'https://mailboxsunil.github.io/iHub/content/PD/3.jpg'
-      ]
+	   code: 'PD',
+	  count: 10,
+      images: []
     }
   ];
 
@@ -270,12 +258,34 @@
 
   // Initialize page on load
   document.addEventListener("DOMContentLoaded", () => {
+	LoadImages();
     currentTopicIndex = 0;
     currentImageIndex = 0;
     imageCounterValue = 1;
     updateDisplay();
     highlightActiveButton();
+	
+	console.log("DOM loaded!");
+	
   });
+  
+	function LoadImages() {
+		console.log("Window loaded!");
+		
+		for (let i = 0; i < topics.length; i++) {
+		
+		for (let j = 1; j <= topics[i].count; j++) {
+			
+			let url = `https://mailboxsunil.github.io/iHub/content/${topics[i].code}/${j}.jpg`;
+			topics[i].images.push(url);
+			
+		}
+	}
+	};
+  
+
+
+
 </script>
 
 </body>
