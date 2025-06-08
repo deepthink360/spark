@@ -47,36 +47,41 @@
       font-weight: bold;
     }
 
-    .main-content {
-      margin-left: 220px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 100vh;
-    }
+	.main-content {
+		margin-left: 220px;
+		padding: 2rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		min-height: 100vh;
+	}
 
     .photo-frame {
-      width: 100%;
-      max-width: 600px;
-      height: 350px;
-      border: 5px solid #ddd;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 1rem;
-      background-color: #f8f9fa;
-      position: relative;
-    }
+		width: 80%; /* Adjusted width */
+		max-width: 800px; /* Increased max-width */
+		height: 450px; /* Increased height */
+		border: 5px solid #ddd;
+		border-radius: 10px;
+		overflow: hidden;
+		margin-bottom: 1rem;
+		background-color: #f8f9fa;
+		position: relative;
+		 display: flex;
+		justify-content: center;
+		align-items: center;
+		aspect-ratio: 16 / 9;
+}
 
     .photo-frame img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
     }
+	
 
     .topic-title {
       font-size: 1.5rem;
@@ -138,7 +143,7 @@
     <button class="btn topic-btn" onclick="loadTopic('Science', this)"><i class="fas fa-flask"></i> Science</button>
     <button class="btn topic-btn" onclick="loadTopic('Learning', this)"><i class="fas fa-graduation-cap"></i> Learning</button>
     <button class="btn topic-btn" onclick="loadTopic('Religion', this)"><i class="fas fa-praying-hands"></i> Religion</button>
-    <button class="btn topic-btn" onclick="loadTopic('Productivity', this)"><i class="fas fa-gears"></i> Productivity</button>
+    <button class="btn topic-btn" onclick="loadTopic('Leadership', this)"><i class="fas fa-gears"></i> Leadership</button>
   </nav>
 
   <!-- Main Content -->
@@ -171,43 +176,43 @@
     {
       title: 'Philosophy',
       code: 'PH',
-      count: 10,
+      count: 30,
       images: []
     },
     {
       title: 'Thinking',
       code: 'TH',
-      count: 10,
+      count: 30,
       images: []
     },
     {
       title: 'Politics',
       code: 'PO',
-      count: 10,
+      count: 30,
       images: []
     },
     {
       title: 'Science',
       code: 'SC',
-      count: 10,
+      count: 12,
       images: []
     },
     {
       title: 'Learning',
       code: 'LE',
-      count: 10,
+      count: 9,
       images: []
     },
     {
       title: 'Religion',
       code: 'RG',
-      count: 10,
+      count: 15,
       images: []
     },
     {
-      title: 'Productivity',
-      code: 'PD',
-      count: 2,
+      title: 'Leadership',
+      code: 'LD',
+      count: 30,
       images: []
     }
   ];
