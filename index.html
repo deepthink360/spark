@@ -12,6 +12,7 @@
   <style>
     body {
       overflow-x: hidden;
+      font-family: Arial, sans-serif;
     }
 
     .sidebar {
@@ -20,6 +21,15 @@
       color: orange;
       padding-top: 1rem;
       min-width: 220px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar.active {
+      width: 60px;
+      min-width: 60px;
     }
 
     .sidebar .btn {
@@ -47,32 +57,32 @@
       font-weight: bold;
     }
 
-	.main-content {
-		margin-left: 220px;
-		padding: 2rem;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		min-height: 100vh;
-	}
+    .main-content {
+      margin-left: 220px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+    }
 
     .photo-frame {
-		width: 90%; 
-		max-width: 900px; 
-		height: 450px; 
-		border: 5px solid #ddd;
-		border-radius: 10px;
-		overflow: hidden;
-		margin-bottom: 1rem;
-		background-color: #f8f9fa;
-		position: relative;
-		 display: flex;
-		justify-content: center;
-		align-items: center;
-		aspect-ratio: 16 / 9;
-	}
+      width: 90%;
+      max-width: 900px;
+      height: 450px;
+      border: 5px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      background-color: #f8f9fa;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 16 / 9;
+    }
 
     .photo-frame img {
       width: 100%;
@@ -81,7 +91,6 @@
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
     }
-	
 
     .topic-title {
       font-size: 1.5rem;
@@ -148,7 +157,6 @@
 
   <!-- Main Content -->
   <div class="main-content">
-    <!-- <div class="topic-title" id="topicTitle">Philosophy</div> -->
     <div class="photo-frame">
       <img id="topicImage" src="" alt="Topic Image" />
     </div>
@@ -171,70 +179,32 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  // Topics with multiple images
   let topics = [
-    {
-      title: 'Philosophy',
-      code: 'PH',
-      count: 30,
-      images: []
-    },
-    {
-      title: 'Thinking',
-      code: 'TH',
-      count: 30,
-      images: []
-    },
-    {
-      title: 'Politics',
-      code: 'PO',
-      count: 30,
-      images: []
-    },
-    {
-      title: 'Science',
-      code: 'SC',
-      count: 12,
-      images: []
-    },
-    {
-      title: 'Learning',
-      code: 'LE',
-      count: 9,
-      images: []
-    },
-    {
-      title: 'Religion',
-      code: 'RG',
-      count: 15,
-      images: []
-    },
-    {
-      title: 'Leadership',
-      code: 'LD',
-      count: 30,
-      images: []
-    }
+    { title: 'Philosophy', code: 'PH', count: 30, images: [] },
+    { title: 'Thinking', code: 'TH', count: 30, images: [] },
+    { title: 'Politics', code: 'PO', count: 30, images: [] },
+    { title: 'Science', code: 'SC', count: 12, images: [] },
+    { title: 'Learning', code: 'LE', count: 9, images: [] },
+    { title: 'Religion', code: 'RG', count: 15, images: [] },
+    { title: 'Leadership', code: 'LD', count: 30, images: [] }
   ];
 
   let currentTopicIndex = 0;
   let currentImageIndex = 0;
-  let imageCounterValue = 1; // counter runs from 1 to 100
+  let imageCounterValue = 1;
 
   function updateDisplay() {
     const topic = topics[currentTopicIndex];
     const imgElement = document.getElementById('topicImage');
-    imgElement.style.opacity = 0; // Start with image hidden
+    imgElement.style.opacity = 0;
 
     setTimeout(() => {
       imgElement.src = topic.images[currentImageIndex];
       imgElement.onload = () => {
-        imgElement.style.opacity = 1; // Fade in after image is loaded
+        imgElement.style.opacity = 1;
       };
-    }, 200); // Match the timeout duration with the CSS transition duration
+    }, 200);
 
-    document.getElementById('topicTitle').textContent = topic.title;
-    imageCounterValue = 1; // reset counter when topic changes
     document.getElementById('imageCounter').textContent = imageCounterValue;
   }
 
@@ -252,7 +222,8 @@
     const index = topics.findIndex(t => t.title === topicName);
     if (index !== -1) {
       currentTopicIndex = index;
-      currentImageIndex = 0; // reset image index to first image for the new topic
+      currentImageIndex = 0;
+      imageCounterValue = 1;
       updateDisplay();
       highlightActiveButton();
     }
@@ -261,24 +232,36 @@
   function changeImage(direction) {
     const images = topics[currentTopicIndex].images;
     const imgElement = document.getElementById('topicImage');
-    imgElement.style.opacity = 0; // Fade out current image
+    imgElement.style.opacity = 0;
 
     setTimeout(() => {
       currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
       imgElement.src = images[currentImageIndex];
       imgElement.onload = () => {
-        imgElement.style.opacity = 1; // Fade in new image
+        imgElement.style.opacity = 1;
       };
 
-      // Increment or decrement the counter, looping 1 to max array length
       imageCounterValue += direction;
       if (imageCounterValue > images.length) imageCounterValue = 1;
       if (imageCounterValue < 1) imageCounterValue = images.length;
       document.getElementById('imageCounter').textContent = imageCounterValue;
-    }, 200); // Match the timeout duration with the CSS transition duration
+    }, 200);
   }
 
-  // Initialize page on load
+  function loadImages() {
+    for (let i = 0; i < topics.length; i++) {
+      for (let j = 1; j <= topics[i].count; j++) {
+        let url = `https://mailboxsunil.github.io/iHub/content/${topics[i].code}/${j}.jpg`;
+        topics[i].images.push(url);
+      }
+    }
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('active');
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     loadImages();
     currentTopicIndex = 0;
@@ -288,16 +271,6 @@
     highlightActiveButton();
     console.log("DOM loaded!");
   });
-
-  function loadImages() {
-    console.log("Loading images...");
-    for (let i = 0; i < topics.length; i++) {
-      for (let j = 1; j <= topics[i].count; j++) {
-        let url = `https://mailboxsunil.github.io/iHub/content/${topics[i].code}/${j}.jpg`;
-        topics[i].images.push(url);
-      }
-    }
-  }
 </script>
 
 </body>
