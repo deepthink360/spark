@@ -15,31 +15,27 @@
       font-family: Arial, sans-serif;
     }
 
+    /* Sidebar */
     .sidebar {
       height: 100vh;
       background-color: #343a40;
       color: orange;
-      padding-top: 1rem;
-      min-width: 220px;
       position: fixed;
       top: 0;
       left: 0;
-      transition: all 0.3s ease;
+      width: 250px;
+      transition: left 0.3s ease;
+      z-index: 1050;
     }
 
     .sidebar.active {
-      width: 60px;
-      min-width: 60px;
+      left: -250px;
     }
 
     .sidebar .btn {
       text-align: left;
       color: orange;
       background-color: transparent;
-      border: none;
-      width: 100%;
-      padding: 0.75rem 1rem;
-      transition: background-color 0.3s, color 0.3s;
     }
 
     .sidebar .btn:hover {
@@ -57,40 +53,33 @@
       font-weight: bold;
     }
 
+    /* Main Content */
     .main-content {
-      margin-left: 220px;
-      padding: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      min-height: 100vh;
+      width: 100%;
+      padding: 1rem;
+      margin-left: 0;
     }
 
     .photo-frame {
-      width: 90%;
-      max-width: 900px;
-      height: 450px;
-      border: 5px solid #ddd;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 1rem;
-      background-color: #f8f9fa;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      aspect-ratio: 16 / 9;
-    }
+  width: 800px; /* Set the desired width */
+  height: 500px; /* Set the desired height */
+  overflow: hidden; /* Hide any content that overflows the frame */
+  position: relative;
+  
+}
 
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures the image fits within the frame without distortion */
+  display: block; /* Removes any unwanted space below the image */
+}
+
 
     .topic-title {
       font-size: 1.5rem;
@@ -113,32 +102,47 @@
       color: #343a40;
     }
 
+    /* Hamburger Button */
+    .hamburger-btn {
+      display: none;
+    }
+
+    /* Responsive Styles */
     @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        z-index: 1050;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
       .main-content {
         margin-left: 0;
-        padding: 1rem;
       }
+	  
+	.photo-frame {
+		width: 500px; 
+		height: 375px; 
+	}
 
-      .sidebar {
-        min-width: 100%;
-        height: auto;
-        position: relative;
-      }
-
-      .photo-frame {
-        max-width: 100%;
-        height: 250px;
-      }
-
-      .nav-buttons {
-        width: 100%;
-        flex-direction: row;
-        gap: 1rem;
+      .hamburger-btn {
+        display: block;
       }
     }
   </style>
 </head>
 <body>
+
+<!-- Hamburger Button visible only on mobile -->
+<button class="btn btn-dark m-2 d-md-none hamburger-btn" onclick="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
 
 <div class="d-flex flex-wrap">
   <!-- Sidebar -->
@@ -161,7 +165,7 @@
       <img id="topicImage" src="" alt="Topic Image" />
     </div>
 
-    <div class="nav-buttons">
+    <div class="nav-buttons mt-3">
       <button class="btn btn-outline-dark" onclick="changeImage(-1)">
         <i class="fas fa-chevron-left"></i> Previous
       </button>
@@ -226,6 +230,12 @@
       imageCounterValue = 1;
       updateDisplay();
       highlightActiveButton();
+
+      // Auto-close sidebar on mobile
+      const sidebar = document.querySelector('.sidebar');
+      if (window.innerWidth < 768 && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+      }
     }
   }
 
@@ -269,7 +279,6 @@
     imageCounterValue = 1;
     updateDisplay();
     highlightActiveButton();
-    console.log("DOM loaded!");
   });
 </script>
 
