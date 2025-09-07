@@ -65,6 +65,7 @@
 
     .photo-frame {
       width: 700px;
+      max-width: 100%;
       height: 450px;
       overflow: hidden;
       position: relative;
@@ -79,25 +80,24 @@
       transition: opacity 0.3s ease-in-out;
     }
 
-    .topic-title {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-
     .nav-buttons {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      width: 320px;
+      margin-top: 1rem;
+      width: 100%;
     }
 
     #imageCounter {
-      min-width: 50px;
+      min-width: 60px;
       font-weight: 700;
       font-size: 1.2rem;
       color: #343a40;
+    }
+
+    #pagination {
+      margin-top: 10px;
     }
 
     .hamburger-btn {
@@ -121,8 +121,10 @@
         display: block;
       }
 
+      /* Stack nav buttons vertically on mobile */
       .nav-buttons {
-        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
       }
     }
   </style>
@@ -140,13 +142,13 @@
     <div class="mb-4 ps-2">
       <span class="fs-4"><i class="fas fa-lightbulb"></i> Spark</span>
     </div>
-    <button class="btn topic-btn" onclick="loadTopic('Philosophy', this)"><i class="fas fa-brain"></i> Philosophy</button>
-    <button class="btn topic-btn" onclick="loadTopic('Thinking', this)"><i class="fas fa-lightbulb"></i> Thinking</button>
-    <button class="btn topic-btn" onclick="loadTopic('Politics', this)"><i class="fas fa-landmark"></i> Politics</button>
-    <button class="btn topic-btn" onclick="loadTopic('Science', this)"><i class="fas fa-flask"></i> Science</button>
-    <button class="btn topic-btn" onclick="loadTopic('Learning', this)"><i class="fas fa-graduation-cap"></i> Learning</button>
-    <button class="btn topic-btn" onclick="loadTopic('Religion', this)"><i class="fas fa-praying-hands"></i> Religion</button>
-    <button class="btn topic-btn" onclick="loadTopic('Leadership', this)"><i class="fas fa-gears"></i> Leadership</button>
+    <button class="btn topic-btn" onclick="loadTopic('Philosophy')"><i class="fas fa-brain"></i> Philosophy</button>
+    <button class="btn topic-btn" onclick="loadTopic('Thinking')"><i class="fas fa-lightbulb"></i> Thinking</button>
+    <button class="btn topic-btn" onclick="loadTopic('Politics')"><i class="fas fa-landmark"></i> Politics</button>
+    <button class="btn topic-btn" onclick="loadTopic('Science')"><i class="fas fa-flask"></i> Science</button>
+    <button class="btn topic-btn" onclick="loadTopic('Learning')"><i class="fas fa-graduation-cap"></i> Learning</button>
+    <button class="btn topic-btn" onclick="loadTopic('Religion')"><i class="fas fa-praying-hands"></i> Religion</button>
+    <button class="btn topic-btn" onclick="loadTopic('Leadership')"><i class="fas fa-gears"></i> Leadership</button>
   </nav>
 
   <!-- Main Content -->
@@ -155,7 +157,8 @@
       <img id="topicImage" src="" alt="Topic Image" />
     </div>
 
-    <div class="nav-buttons mt-3">
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
       <button class="btn btn-outline-dark" onclick="changeImage(-1)">
         <i class="fas fa-chevron-left"></i> Previous
       </button>
@@ -165,10 +168,8 @@
       </button>
     </div>
 
-    <!-- Swipe hint for mobile -->
-    <div class="text-muted d-md-none mt-2" style="font-size: 0.9rem;">
-      Swipe up/down to change image
-    </div>
+    <!-- Pagination Buttons -->
+    <div id="pagination" class="mt-3 d-flex flex-wrap justify-content-center gap-2"></div>
   </div>
 </div>
 
@@ -176,6 +177,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+  const imagesPerPage = 10;
   let topics = [
     { title: 'Philosophy', code: 'PH', count: 181, images: [] },
     { title: 'Thinking', code: 'TH', count: 85, images: [] },
@@ -188,34 +190,36 @@
 
   let currentTopicIndex = 0;
   let currentImageIndex = 0;
-  let imageCounterValue = 1;
+  let currentPage = 1;
 
   function updateDisplay() {
     const topic = topics[currentTopicIndex];
+    const startIndex = (currentPage - 1) * imagesPerPage;
+    const paginatedImages = topic.images.slice(startIndex, startIndex + imagesPerPage);
+
     const imgElement = document.getElementById('topicImage');
     imgElement.style.opacity = 0;
 
     setTimeout(() => {
-      imgElement.src = topic.images[currentImageIndex];
-      imgElement.alt = `${topic.title} image ${imageCounterValue}`;
-      imgElement.onload = () => {
-        imgElement.style.opacity = 1;
-      };
-      imgElement.onerror = () => {
-        imgElement.src = 'https://deepthink360.github.io/spark/content/error.jpg';
-      };
+      if (paginatedImages.length > 0) {
+        const imageToShow = paginatedImages[currentImageIndex % paginatedImages.length];
+        imgElement.src = imageToShow;
+        imgElement.alt = `${topic.title} image ${startIndex + currentImageIndex + 1}`;
+        document.getElementById('imageCounter').textContent = `${startIndex + currentImageIndex + 1} / ${topic.images.length}`;
+        imgElement.onload = () => {
+          imgElement.style.opacity = 1;
+        };
+        imgElement.onerror = () => {
+          imgElement.src = 'https://deepthink360.github.io/spark/content/error.jpg';
+        };
+      }
     }, 200);
-
-    document.getElementById('imageCounter').textContent = imageCounterValue;
   }
 
   function highlightActiveButton() {
     const buttons = document.querySelectorAll('.topic-btn');
-    buttons.forEach(btn => {
-      btn.classList.remove('active-topic');
-      if (btn.textContent.trim().startsWith(topics[currentTopicIndex].title)) {
-        btn.classList.add('active-topic');
-      }
+    buttons.forEach((btn, i) => {
+      btn.classList.toggle('active-topic', topics[i].title === topics[currentTopicIndex].title);
     });
   }
 
@@ -224,9 +228,10 @@
     if (index !== -1) {
       currentTopicIndex = index;
       currentImageIndex = 0;
-      imageCounterValue = 1;
+      currentPage = 1;
       updateDisplay();
       highlightActiveButton();
+      renderPagination();
 
       const sidebar = document.querySelector('.sidebar');
       if (window.innerWidth < 768 && sidebar.classList.contains('active')) {
@@ -236,12 +241,35 @@
   }
 
   function changeImage(direction) {
-    const images = topics[currentTopicIndex].images;
-    if (!images.length) return;
+    const topic = topics[currentTopicIndex];
+    const startIndex = (currentPage - 1) * imagesPerPage;
+    const paginatedImages = topic.images.slice(startIndex, startIndex + imagesPerPage);
 
-    currentImageIndex = (currentImageIndex + direction + images.length) % images.length;
-    imageCounterValue = currentImageIndex + 1;
+    if (!paginatedImages.length) return;
+
+    currentImageIndex = (currentImageIndex + direction + paginatedImages.length) % paginatedImages.length;
     updateDisplay();
+  }
+
+  function renderPagination() {
+    const paginationDiv = document.getElementById('pagination');
+    paginationDiv.innerHTML = '';
+
+    const topic = topics[currentTopicIndex];
+    const totalPages = Math.ceil(topic.images.length / imagesPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-sm ' + (i === currentPage ? 'btn-dark' : 'btn-outline-dark');
+      btn.textContent = i;
+      btn.onclick = () => {
+        currentPage = i;
+        currentImageIndex = 0;
+        updateDisplay();
+        renderPagination();
+      };
+      paginationDiv.appendChild(btn);
+    }
   }
 
   function loadImages() {
@@ -260,37 +288,8 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     loadImages();
-    currentTopicIndex = 0;
-    currentImageIndex = 0;
-    imageCounterValue = 1;
-    updateDisplay();
-    highlightActiveButton();
+    loadTopic('Philosophy');
   });
-
-  // Swipe support
-  let startY = 0;
-  const photoFrame = document.querySelector('.photo-frame');
-
-  photoFrame.addEventListener('touchstart', (e) => {
-    startY = e.changedTouches[0].clientY;
-  });
-
-  photoFrame.addEventListener('touchend', (e) => {
-    const endY = e.changedTouches[0].clientY;
-    const diffY = startY - endY;
-
-    if (Math.abs(diffY) > 50) {
-      if (diffY > 0) {
-        changeImage(1); // swipe up
-      } else {
-        changeImage(-1); // swipe down
-      }
-    }
-  });
-
-  photoFrame.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-  }, { passive: false });
 </script>
 
 </body>
